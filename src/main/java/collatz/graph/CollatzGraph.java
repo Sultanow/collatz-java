@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +19,11 @@ import com.mxgraph.view.mxGraph;
 
 public class CollatzGraph extends mxGraph {
 
-	private final Node root = new Node(1, null, null);
+	private static final BigInteger THREE = BigInteger.valueOf(3);
+	private static final BigInteger FOUR = BigInteger.valueOf(4);
+	private static final BigInteger MINUS_ONE = BigInteger.valueOf(-1);
+	
+	private final Node root = new Node(BigInteger.ONE, null, null);
 	private final int w;
 	private final int h;
 	private final Node[][] grid;
@@ -61,12 +66,13 @@ public class CollatzGraph extends mxGraph {
 		getModel().endUpdate();
 
 		// save to file
-		//try {
-		//	BufferedImage image = mxCellRenderer.createBufferedImage(this, null, 1, Color.WHITE, true, null);
-		//	ImageIO.write(image, "PNG", new File("C:\\tmp\\graph.png"));
-		//} catch (Exception e) {
-		//	e.printStackTrace();
-		//}
+		// try {
+		// BufferedImage image = mxCellRenderer.createBufferedImage(this, null, 1,
+		// Color.WHITE, true, null);
+		// ImageIO.write(image, "PNG", new File("C:\\tmp\\graph.png"));
+		// } catch (Exception e) {
+		// e.printStackTrace();
+		// }
 	}
 
 	public void draw(Node node, Object parent) {
@@ -78,10 +84,10 @@ public class CollatzGraph extends mxGraph {
 			// if (node.row < h && node.col < w) {
 			// grid[node.row][node.col] = node;
 			// }
-			if (Primes.isPrime(node.value)) {
+			if (Primes.isPrime(node.value.intValue())) {
 				setCellStyles(mxConstants.STYLE_FILLCOLOR, "#cc5577", new Object[] { node.vertex });
 			}
-			if (node.value % 3 == 0) {
+			if (node.value.mod(THREE).equals(BigInteger.ZERO)) {
 				setCellStyles(mxConstants.STYLE_FILLCOLOR, "#00ff00", new Object[] { node.vertex });
 			}
 		}
@@ -105,10 +111,11 @@ public class CollatzGraph extends mxGraph {
 
 	private void generateSuccessors(Node node, int row, int col) {
 		if (row <= this.h) {
-			Node successor1 = new Node(node.value * 2, node, root);
-			if (node.value > 4 && node.value % 2 == 0 && (node.value - 1) % 3 == 0) {
+			Node successor1 = new Node(node.value.multiply(BigInteger.TWO), node, root);
+			if (node.value.compareTo(FOUR) == 1 && node.value.mod(BigInteger.TWO).equals(BigInteger.ZERO)
+					&& (node.value.add(MINUS_ONE)).mod(THREE).equals(BigInteger.ZERO)) {
 				if (col <= this.w) {
-					Node successor2 = new Node((node.value - 1) / 3, node, root);
+					Node successor2 = new Node((node.value.add(MINUS_ONE).divide(THREE)), node, root);
 					generateSuccessors(successor2, row + 1, col + 1);
 				}
 			}
@@ -117,7 +124,7 @@ public class CollatzGraph extends mxGraph {
 	}
 
 	private void collectEvenNodes(Node node, List<Node> evenNodes) {
-		if (node.value % 2 == 0) {
+		if (node.value.mod(BigInteger.TWO).equals(BigInteger.ZERO)) {
 			evenNodes.add(node);
 		}
 		for (Node successor : node.successors) {

@@ -1,11 +1,12 @@
 package collatz.graph;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 
 public class Node {
 	public static Node root;
 
-	public final int value;
+	public final BigInteger value;
 
 	public int row;
 	public int col;
@@ -16,7 +17,7 @@ public class Node {
 
 	public Object vertex;
 
-	public Node(int value, Node predecessor, Node root) {
+	public Node(BigInteger value, Node predecessor, Node root) {
 		this.value = value;
 		this.predecessor = predecessor;
 
