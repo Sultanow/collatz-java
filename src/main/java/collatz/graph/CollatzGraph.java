@@ -61,12 +61,12 @@ public class CollatzGraph extends mxGraph {
 		getModel().endUpdate();
 
 		// save to file
-		try {
-			BufferedImage image = mxCellRenderer.createBufferedImage(this, null, 1, Color.WHITE, true, null);
-			ImageIO.write(image, "PNG", new File("C:\\tmp\\graph.png"));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		//try {
+		//	BufferedImage image = mxCellRenderer.createBufferedImage(this, null, 1, Color.WHITE, true, null);
+		//	ImageIO.write(image, "PNG", new File("C:\\tmp\\graph.png"));
+		//} catch (Exception e) {
+		//	e.printStackTrace();
+		//}
 	}
 
 	public void draw(Node node, Object parent) {
