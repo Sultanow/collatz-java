@@ -7,7 +7,9 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import javax.imageio.ImageIO;
 
@@ -46,15 +48,15 @@ public class CollatzGraph extends mxGraph {
 		int row = 0;
 		int col = 0;
 		generateSuccessors(root, row, col);
-
 		Node.recalculateColumns();
+		
 		List<Node> evenNodes = new ArrayList<Node>();
 		collectEvenNodes(root, evenNodes);
 		for (Node evenNode : evenNodes) {
 			evenNode.absorb();
 		}
 		Node.recalculateColumns();
-
+		
 		// Begin drawing
 		Object parent = getDefaultParent();
 		getModel().beginUpdate();
@@ -84,6 +86,11 @@ public class CollatzGraph extends mxGraph {
 			// if (node.row < h && node.col < w) {
 			// grid[node.row][node.col] = node;
 			// }
+			
+			//if (IntStream.of(new int[]{5,13,17,45}).anyMatch(x -> x == node.value.intValue())) {
+			//	setCellStyles(mxConstants.STYLE_FILLCOLOR, "#ffbe27", new Object[] { node.vertex });
+			//	setCellStyles(mxConstants.STYLE_STROKECOLOR, "#ff7927", new Object[] { node.vertex });
+			//}
 			if (Primes.isPrime(node.value.intValue())) {
 				setCellStyles(mxConstants.STYLE_FILLCOLOR, "#cc5577", new Object[] { node.vertex });
 			}
