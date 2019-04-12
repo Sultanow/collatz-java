@@ -3,8 +3,11 @@ package collatz.graph;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,12 +22,15 @@ import com.mxgraph.util.mxCellRenderer;
 import com.mxgraph.util.mxConstants;
 import com.mxgraph.view.mxGraph;
 
+import collatz.dtsm.RingComputation;
+
 public class CollatzGraph extends mxGraph {
 
 	private static final BigInteger THREE = BigInteger.valueOf(3);
 	private static final BigInteger FOUR = BigInteger.valueOf(4);
+	private static final BigInteger EIGHT = BigInteger.valueOf(8);
 	private static final BigInteger MINUS_ONE = BigInteger.valueOf(-1);
-	
+
 	private final Node root = new Node(BigInteger.ONE, null, null);
 	private final int w;
 	private final int h;
@@ -49,22 +55,29 @@ public class CollatzGraph extends mxGraph {
 		int col = 0;
 		generateSuccessors(root, row, col);
 		Node.recalculateColumns();
-		
+
 		List<Node> evenNodes = new ArrayList<Node>();
 		collectEvenNodes(root, evenNodes);
 		for (Node evenNode : evenNodes) {
 			evenNode.absorb();
 		}
 		Node.recalculateColumns();
-		
+
+		// Save CSV: row | col | value | residue_8
+		/*
+		 * try (Writer writer = new BufferedWriter(new
+		 * FileWriter("c:/tmp/collatztree.cvs"))) { write(root, writer); } catch
+		 * (IOException e) {
+		 * System.out.println("Problem occurs when creating csv file");
+		 * e.printStackTrace(); }
+		 */
+
 		// Begin drawing
 		Object parent = getDefaultParent();
 		getModel().beginUpdate();
 		draw(root, parent);
-
 		// mxGraphLayout layout = new mxParallelEdgeLayout(this);
 		// layout.execute(parent);
-
 		getModel().endUpdate();
 
 		// save to file
@@ -86,11 +99,14 @@ public class CollatzGraph extends mxGraph {
 			// if (node.row < h && node.col < w) {
 			// grid[node.row][node.col] = node;
 			// }
-			
-			//if (IntStream.of(new int[]{5,13,17,45}).anyMatch(x -> x == node.value.intValue())) {
-			//	setCellStyles(mxConstants.STYLE_FILLCOLOR, "#ffbe27", new Object[] { node.vertex });
-			//	setCellStyles(mxConstants.STYLE_STROKECOLOR, "#ff7927", new Object[] { node.vertex });
-			//}
+
+			// if (IntStream.of(new int[]{5,13,17,45}).anyMatch(x -> x ==
+			// node.value.intValue())) {
+			// setCellStyles(mxConstants.STYLE_FILLCOLOR, "#ffbe27", new Object[] {
+			// node.vertex });
+			// setCellStyles(mxConstants.STYLE_STROKECOLOR, "#ff7927", new Object[] {
+			// node.vertex });
+			// }
 			if (Primes.isPrime(node.value.intValue())) {
 				setCellStyles(mxConstants.STYLE_FILLCOLOR, "#cc5577", new Object[] { node.vertex });
 			}
@@ -136,6 +152,20 @@ public class CollatzGraph extends mxGraph {
 		}
 		for (Node successor : node.successors) {
 			collectEvenNodes(successor, evenNodes);
+		}
+	}
+
+	/*
+	 * Save CSV: row | col | value | residue_8
+	 */
+	public void write(Node node, Writer writer) throws IOException {
+		String line = node.row + "\t" + node.col + "\t" + node.value + "\t" + node.value.mod(EIGHT);
+		writer.write(line);
+		writer.write(System.getProperty("line.separator"));
+
+		for (Node each : node.successors) {
+			write(each, writer);
+			writer.flush();
 		}
 	}
 }
