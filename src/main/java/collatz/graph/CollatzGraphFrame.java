@@ -16,7 +16,10 @@ public class CollatzGraphFrame extends JFrame {
 		super("Collatz Tree");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		CollatzGraph graph = new CollatzGraph(w, h);
+		//CollatzGraph graph = new CollatzGraph(w, h);
+		CsvGraph graph = new CsvGraph(w, h, 58, 36, 70, 64, "graph_k5_17.csv", 43);
+		graph.init();
+		
 		mxGraphComponent graphComponent = new mxGraphComponent(graph);
 		graphComponent.getViewport().setBackground(Color.WHITE);
 		graphComponent.setBorder(new EmptyBorder(10, 10, 10, 10));
