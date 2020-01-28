@@ -18,6 +18,7 @@ public class CollatzGraphFrame extends JFrame {
 
 		//CollatzGraph graph = new CollatzGraph(w, h);
 		CsvGraph graph = new CsvGraph(w, h, 58, 36, 70, 64, "graph_k5_17.csv", 43);
+		//CsvGraph graph = new CsvGraph(w, h, 50, 42, 64, 64, "graph_k5_3.csv", 1);
 		graph.init();
 		
 		mxGraphComponent graphComponent = new mxGraphComponent(graph);
