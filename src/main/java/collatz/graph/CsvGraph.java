@@ -6,6 +6,7 @@ import java.math.BigInteger;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
@@ -85,10 +86,31 @@ public class CsvGraph extends AbstractCollatzGraph {
 			loopBackEdgeStyle.put(mxConstants.STYLE_EDGE, mxConstants.EDGESTYLE_ORTHOGONAL);
 			stylesheet.putCellStyle("LOOP_BACK", loopBackEdgeStyle);
 
+			List<Node> selfLoopBacks = new ArrayList<>();
 			for (Map.Entry<Node, Node> loopBack : loopBacks.entrySet()) {
-				Object edge = insertEdge(parent, loopBack.getKey().value + "_" + loopBack.getValue().value, null,
-						loopBack.getKey().vertex, loopBack.getValue().vertex, "edgeStyle=LOOP_BACK");
-				((mxCell)edge).setStyle("LOOP_BACK");
+				if (loopBack.getKey().equals(loopBack.getValue())) {
+					selfLoopBacks.add(loopBack.getKey());
+				} else {
+					Object edge = insertEdge(parent, loopBack.getKey().value + "_" + loopBack.getValue().value, null,
+							loopBack.getKey().vertex, loopBack.getValue().vertex, "edgeStyle=LOOP_BACK");
+					((mxCell)edge).setStyle("LOOP_BACK");
+				}
+			}
+			
+			if (drawSelfLoops && !selfLoopBacks.isEmpty()) {
+				loopBackEdgeStyle = new Hashtable<String, Object>();
+				loopBackEdgeStyle.put(mxConstants.STYLE_EXIT_X, 1);
+				loopBackEdgeStyle.put(mxConstants.STYLE_EXIT_Y, 0.23);
+				loopBackEdgeStyle.put(mxConstants.STYLE_ENTRY_X, 1);
+				loopBackEdgeStyle.put(mxConstants.STYLE_ENTRY_Y, 0.77);
+				loopBackEdgeStyle.put(mxConstants.STYLE_EDGE, mxConstants.EDGESTYLE_LOOP);
+				stylesheet.putCellStyle("SELF_LOOP_BACK", loopBackEdgeStyle);
+				
+				for (Node selfLoopBack : selfLoopBacks) {
+					Object edge = insertEdge(parent, selfLoopBack.value + "_" + selfLoopBack.value, null,
+							selfLoopBack.vertex, selfLoopBack.vertex, "edgeStyle=LOOP_BACK");
+					((mxCell)edge).setStyle("SELF_LOOP_BACK");
+				}
 			}
 		}
 	}

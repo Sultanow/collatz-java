@@ -33,11 +33,17 @@ public abstract class AbstractCollatzGraph extends mxGraph {
 	private final int hSpacing;
 	private final int vSpacing;
 
+	protected final boolean drawSelfLoops;
+	
 	public AbstractCollatzGraph(int w, int h) {
-		this(w, h, 30, 30, 60, 60);
+		this(w, h, 30, 30, 60, 60, false);
 	}
 
 	public AbstractCollatzGraph(int w, int h, int nodeWidth, int nodeHeight, int hSpacing, int vSpacing) {
+		this(w, h, nodeWidth, nodeHeight, hSpacing, vSpacing, false);
+	}
+	
+	public AbstractCollatzGraph(int w, int h, int nodeWidth, int nodeHeight, int hSpacing, int vSpacing, boolean drawSelfLoops) {
 		this.w = w;
 		this.h = h;
 		grid = new Node[h][w];
@@ -46,6 +52,8 @@ public abstract class AbstractCollatzGraph extends mxGraph {
 		this.nodeHeight = nodeHeight;
 		this.hSpacing = hSpacing;
 		this.vSpacing = vSpacing;
+		
+		this.drawSelfLoops = drawSelfLoops;
 	}
 
 	protected abstract void init();

@@ -17,7 +17,8 @@ public class CollatzGraphFrame extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		//CollatzGraph graph = new CollatzGraph(w, h);
-		CsvGraph graph = new CsvGraph(w, h, 58, 36, 70, 64, "graph_k5_17.csv", 43);
+		CsvGraph graph = new CsvGraph(w, h, 50, 42, 64, 64, "graph_k_1.csv", 1);
+		//CsvGraph graph = new CsvGraph(w, h, 58, 36, 70, 64, "graph_k_7.csv", 1);
 		//CsvGraph graph = new CsvGraph(w, h, 50, 42, 64, 64, "graph_k5_3.csv", 1);
 		graph.init();
 		
