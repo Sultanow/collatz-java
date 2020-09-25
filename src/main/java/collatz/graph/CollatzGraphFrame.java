@@ -24,7 +24,7 @@ public class CollatzGraphFrame extends JFrame {
 		
 		mxGraphComponent graphComponent = new mxGraphComponent(graph);
 		graphComponent.getViewport().setBackground(Color.WHITE);
-		graphComponent.setBorder(new EmptyBorder(10, 10, 10, 10));
+		graphComponent.setBorder(new EmptyBorder(10, 0, 10, 10));
 		graphComponent.setBackground(Color.WHITE);
 		getContentPane().add(graphComponent);
 		pack();
