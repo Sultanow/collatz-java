@@ -19,20 +19,21 @@ import com.mxgraph.util.mxConstants;
 import com.mxgraph.util.mxPoint;
 
 public class CsvGraph extends AbstractCollatzGraph {
-	
-	private static final Pattern PATTERN_CSV = Pattern.compile("\\d+,(\\d+),(\\d+),.+");
 
 	private BigInteger[][] successorMap;
 	private Map<BigInteger, Node> predecessorMap = new HashMap<>();
 	private Map<Node, Node> loopBacks = new HashMap<>();
 
 	private final String file;
+	private final Pattern csvPattern;
 	private final int root;
-	
-	public CsvGraph(int w, int h, int nodeWidth, int nodeHeight, int hSpacing, int vSpacing, String file, int root) {
+
+	public CsvGraph(int w, int h, int nodeWidth, int nodeHeight, int hSpacing, int vSpacing, String file,
+			Pattern csvPattern, int root) {
 		super(w, h, nodeWidth, nodeHeight, hSpacing, vSpacing);
-		
+
 		this.file = file;
+		this.csvPattern = csvPattern;
 		this.root = root;
 	}
 
@@ -49,7 +50,7 @@ public class CsvGraph extends AbstractCollatzGraph {
 			int i = 0;
 			for (String line : lines) {
 				if (i > 0) {
-					Matcher matcher = PATTERN_CSV.matcher(line);
+					Matcher matcher = csvPattern.matcher(line);
 					if (matcher.matches()) {
 						successorMap[i - 1][0] = BigInteger.valueOf(Long.valueOf(matcher.group(1)));
 						successorMap[i - 1][1] = BigInteger.valueOf(Long.valueOf(matcher.group(2)));
@@ -93,10 +94,10 @@ public class CsvGraph extends AbstractCollatzGraph {
 				} else {
 					Object edge = insertEdge(parent, loopBack.getKey().value + "_" + loopBack.getValue().value, null,
 							loopBack.getKey().vertex, loopBack.getValue().vertex, "edgeStyle=LOOP_BACK");
-					((mxCell)edge).setStyle("LOOP_BACK");
+					((mxCell) edge).setStyle("LOOP_BACK");
 				}
 			}
-			
+
 			if (drawSelfLoops && !selfLoopBacks.isEmpty()) {
 				loopBackEdgeStyle = new Hashtable<String, Object>();
 				loopBackEdgeStyle.put(mxConstants.STYLE_EXIT_X, 1);
@@ -105,11 +106,11 @@ public class CsvGraph extends AbstractCollatzGraph {
 				loopBackEdgeStyle.put(mxConstants.STYLE_ENTRY_Y, 0.77);
 				loopBackEdgeStyle.put(mxConstants.STYLE_EDGE, mxConstants.EDGESTYLE_LOOP);
 				stylesheet.putCellStyle("SELF_LOOP_BACK", loopBackEdgeStyle);
-				
+
 				for (Node selfLoopBack : selfLoopBacks) {
 					Object edge = insertEdge(parent, selfLoopBack.value + "_" + selfLoopBack.value, null,
 							selfLoopBack.vertex, selfLoopBack.vertex, "edgeStyle=LOOP_BACK");
-					((mxCell)edge).setStyle("SELF_LOOP_BACK");
+					((mxCell) edge).setStyle("SELF_LOOP_BACK");
 				}
 			}
 		}
