@@ -25,7 +25,9 @@ public class CollatzGraphFrame extends JFrame {
 		//CsvGraph graph = new CsvGraph(w, h, 50, 42, 64, 64, "graph_k_1.csv", 1);
 		//CsvGraph graph = new CsvGraph(w, h, 58, 36, 70, 64, "graph_k_7_small.csv", PATTERN_CSV_1, 1);
 		//CsvGraph graph = new CsvGraph(w, h, 50, 42, 64, 64, "graph_k5_3.csv", 1);
-		CsvGraph graph = new CsvGraph(w, h, 40, 36, 70, 64, "bintree_k3_small.csv", PATTERN_CSV_1, 1);
+		//CsvGraph graph = new CsvGraph(w, h, 40, 36, 70, 64, "bintree_k3_small.csv", PATTERN_CSV_1, 1);
+		//CsvGraph graph = new CsvGraph(w, h, 40, 36, 70, 64, "graph_k_9.csv", PATTERN_CSV_1, 1);
+		CsvGraph graph = new CsvGraph(w, h, 40, 36, 70, 64, "bintree_k3_inverse_small.csv", PATTERN_CSV_1, 1, false, true);
 		graph.init();
 		
 		mxGraphComponent graphComponent = new mxGraphComponent(graph);

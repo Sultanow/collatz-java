@@ -34,16 +34,18 @@ public abstract class AbstractCollatzGraph extends mxGraph {
 	private final int vSpacing;
 
 	protected final boolean drawSelfLoops;
-	
+	protected final boolean rotate;
+
 	public AbstractCollatzGraph(int w, int h) {
-		this(w, h, 30, 30, 60, 60, false);
+		this(w, h, 30, 30, 60, 60, false, false);
 	}
 
 	public AbstractCollatzGraph(int w, int h, int nodeWidth, int nodeHeight, int hSpacing, int vSpacing) {
-		this(w, h, nodeWidth, nodeHeight, hSpacing, vSpacing, false);
+		this(w, h, nodeWidth, nodeHeight, hSpacing, vSpacing, false, false);
 	}
-	
-	public AbstractCollatzGraph(int w, int h, int nodeWidth, int nodeHeight, int hSpacing, int vSpacing, boolean drawSelfLoops) {
+
+	public AbstractCollatzGraph(int w, int h, int nodeWidth, int nodeHeight, int hSpacing, int vSpacing,
+			boolean drawSelfLoops, boolean rotate) {
 		this.w = w;
 		this.h = h;
 		grid = new Node[h][w];
@@ -52,16 +54,29 @@ public abstract class AbstractCollatzGraph extends mxGraph {
 		this.nodeHeight = nodeHeight;
 		this.hSpacing = hSpacing;
 		this.vSpacing = vSpacing;
-		
+
 		this.drawSelfLoops = drawSelfLoops;
+		this.rotate = rotate;
 	}
 
 	protected abstract void init();
 
+	// We remember: nodeLevel = nodeDepth + 1
+	public static int calculateMaxDepth(Node root, int depth) {
+		int result = depth;
+
+		for (Node node : root.successors)
+			result = Math.max(result, calculateMaxDepth(node, depth + 1));
+
+		return result;
+	}
+
 	public void draw(Node node, Object parent) {
 		if (node.vertex == null) {
+			int maxDepth = calculateMaxDepth(Node.root, 0);
+			int row = rotate ? maxDepth - node.row : node.row;
 			node.vertex = insertVertex(parent, String.valueOf(node.value), node.value, node.col * hSpacing,
-					node.row * vSpacing, nodeWidth, nodeHeight);
+					row * vSpacing, nodeWidth, nodeHeight);
 
 			// if (node.row < h && node.col < w) {
 			// grid[node.row][node.col] = node;

@@ -29,8 +29,8 @@ public class CsvGraph extends AbstractCollatzGraph {
 	private final int root;
 
 	public CsvGraph(int w, int h, int nodeWidth, int nodeHeight, int hSpacing, int vSpacing, String file,
-			Pattern csvPattern, int root) {
-		super(w, h, nodeWidth, nodeHeight, hSpacing, vSpacing);
+			Pattern csvPattern, int root, boolean drawSelfLoops, boolean rotate) {
+		super(w, h, nodeWidth, nodeHeight, hSpacing, vSpacing, drawSelfLoops, rotate);
 
 		this.file = file;
 		this.csvPattern = csvPattern;
