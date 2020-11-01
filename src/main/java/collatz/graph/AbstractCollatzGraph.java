@@ -14,6 +14,7 @@ import javax.imageio.ImageIO;
 import org.apache.commons.math3.primes.Primes;
 
 import com.mxgraph.util.mxCellRenderer;
+import com.mxgraph.util.mxConstants;
 import com.mxgraph.view.mxGraph;
 
 public abstract class AbstractCollatzGraph extends mxGraph {
@@ -89,6 +90,11 @@ public abstract class AbstractCollatzGraph extends mxGraph {
 			// setCellStyles(mxConstants.STYLE_STROKECOLOR, "#ff7927", new Object[] {
 			// node.vertex });
 			// }
+			if (node.prunable) {
+				setCellStyles(mxConstants.STYLE_FILLCOLOR, "ffbe27", new Object[] { node.vertex });
+				setCellStyles(mxConstants.STYLE_STROKECOLOR, "#ff7927", new Object[] { node.vertex });
+			}
+
 			if (Primes.isPrime(node.value.intValue())) {
 				// setCellStyles(mxConstants.STYLE_FILLCOLOR, "#cc5577", new Object[] {
 				// node.vertex });

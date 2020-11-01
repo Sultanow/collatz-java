@@ -7,7 +7,8 @@ public class Node {
 	public static Node root;
 
 	public final BigInteger value;
-
+	public boolean prunable = false;
+	
 	public int row;
 	public int col;
 	public int breadth = 1;

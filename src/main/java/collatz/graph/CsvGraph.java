@@ -19,10 +19,11 @@ import com.mxgraph.util.mxConstants;
 import com.mxgraph.util.mxPoint;
 
 public class CsvGraph extends AbstractCollatzGraph {
-
+	
 	private BigInteger[][] successorMap;
 	private Map<BigInteger, Node> predecessorMap = new HashMap<>();
 	private Map<Node, Node> loopBacks = new HashMap<>();
+	private Map<BigInteger, Boolean> prunableMap = new HashMap<>();
 
 	private final String file;
 	private final Pattern csvPattern;
@@ -54,6 +55,7 @@ public class CsvGraph extends AbstractCollatzGraph {
 					if (matcher.matches()) {
 						successorMap[i - 1][0] = BigInteger.valueOf(Long.valueOf(matcher.group(1)));
 						successorMap[i - 1][1] = BigInteger.valueOf(Long.valueOf(matcher.group(2)));
+						prunableMap.put(successorMap[i - 1][1], Boolean.valueOf(matcher.group(3)));
 					}
 				}
 				i++;
@@ -127,6 +129,8 @@ public class CsvGraph extends AbstractCollatzGraph {
 						loopBacks.put(node, existing);
 					} else {
 						Node successor = new Node(key[1], node, Node.root);
+						if (prunableMap.containsKey(key[1]))
+							successor.prunable = prunableMap.get(key[1]);
 						generateSuccessors(successor, row + 1, col + i);
 					}
 				}
